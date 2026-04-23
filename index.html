@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>NFTDimochka | Хомяки 3x3 + Лидеры</title>
+    <title>NFTDimochka | Хомяки 3x3</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
         body {
             min-height: 100vh;
             background: radial-gradient(ellipse at center, #0a0f1a 0%, #03060c 100%);
@@ -45,7 +50,7 @@
             z-index: 0;
         }
         .app-container {
-            max-width: 1400px;
+            max-width: 1300px;
             margin: 0 auto;
             position: relative;
             z-index: 5;
@@ -63,6 +68,7 @@
             border-radius: 60px;
             padding: 10px 28px;
             border: 1px solid #2eff9e;
+            box-shadow: 0 0 12px #2eff9e66;
         }
         .logo h1 {
             font-size: 1.6rem;
@@ -86,8 +92,16 @@
             border-radius: 50px;
             border: 1px solid gold;
         }
-        .coin-amount { font-size: 28px; font-weight: 800; color: gold; }
-        .user-area { display: flex; gap: 10px; flex-wrap: wrap; }
+        .coin-amount {
+            font-size: 28px;
+            font-weight: 800;
+            color: gold;
+        }
+        .user-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
         button {
             background: #1f2a3e;
             border: none;
@@ -104,7 +118,7 @@
         }
         .grid-2col {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
         }
         .card {
@@ -113,6 +127,7 @@
             border-radius: 38px;
             padding: 20px;
             border: 1px solid rgba(46, 255, 158, 0.5);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
         }
         .card h2 {
             font-size: 1.5rem;
@@ -183,17 +198,6 @@
             background: #2a451f;
             border-color: gold;
         }
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        .leaderboard-table th, .leaderboard-table td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #2eff9e55;
-        }
-        .leaderboard-table th { color: #2eff9e; }
         .admin-panel {
             background: #0a0c16;
             border-radius: 32px;
@@ -201,7 +205,9 @@
             border: 2px solid crimson;
             margin-top: 10px;
         }
-        .admin-panel.hidden { display: none; }
+        .admin-panel.hidden {
+            display: none;
+        }
         .flex-row {
             display: flex;
             flex-wrap: wrap;
@@ -267,24 +273,14 @@
         </div>
     </div>
 
-    <div class="grid-2col">
-        <div class="card">
-            <h2>🏆 ТАБЛИЦА ЛИДЕРОВ (ТОП-10)</h2>
-            <div id="leaderboardContainer" class="status">Загрузка...</div>
-            <table class="leaderboard-table" id="leaderboardTable" style="display:none;">
-                <thead><tr><th>#</th><th>Игрок</th><th>💰 Монеты</th></tr></thead>
-                <tbody id="leaderboardBody"></tbody>
-            </table>
-        </div>
-        <div class="card">
-            <h2>🃏 КОЛЛЕКЦИЯ КАРТ</h2>
-            <div id="nftCollection" class="collection"></div>
-            <div class="status">★ Владей картами Dimochka</div>
-        </div>
+    <div class="card">
+        <h2>🃏 КОЛЛЕКЦИЯ КАРТ</h2>
+        <div id="nftCollection" class="collection"></div>
+        <div class="status">★ Владей картами Dimochka</div>
     </div>
 
     <div id="adminPanel" class="admin-panel hidden">
-        <h3 style="color:red">🔧 АДМИН (без пароля)</h3>
+        <h3 style="color:red">🔧 АДМИН-ПАНЕЛЬ (без пароля)</h3>
         <div class="flex-row">
             <input type="text" id="adminUser" placeholder="username">
             <input type="number" id="adminCoins" placeholder="монеты">
@@ -298,8 +294,8 @@
 
 <script>
     let currentUser = null;
+    let gameActive = false;
     let clickPower = 1;
-    let gameActive = false;     // тапать можно только когда игра активна
 
     const upgrades = [
         { id: "power1", name: "🐾 Лапа +1", price: 150, effect: (u) => { u.clickBonus = (u.clickBonus||1)+1; return u; } },
@@ -335,12 +331,11 @@
         currentUser = createUser(username);
         localStorage.setItem(`user_${username}`, JSON.stringify(currentUser));
         syncUI();
-        updateLeaderboard();
         return true;
     }
     function loginUser(username){
         let data = loadUser(username);
-        if(data){ currentUser = data; syncUI(); updateLeaderboard(); return true; }
+        if(data){ currentUser = data; syncUI(); return true; }
         return false;
     }
     function syncUI(){
@@ -362,7 +357,6 @@
                 if(currentUser.coins<0) currentUser.coins=0;
                 document.getElementById("dimochkaCoinsDisplay").innerText = Math.floor(currentUser.coins);
                 saveUser();
-                updateLeaderboard();
             }
         },1000);
     }
@@ -382,7 +376,6 @@
                     currentUser.upgrades.push(item.id);
                     currentUser = item.effect(currentUser);
                     syncUI();
-                    updateLeaderboard();
                     showToast(`+ ${item.name}`);
                 } else showToast("Не хватает монет");
             });
@@ -406,7 +399,6 @@
                     currentUser.upgrades.push("auto");
                     currentUser.autoPerSec = (currentUser.autoPerSec||0)+1;
                     syncUI();
-                    updateLeaderboard();
                     showToast("🎫 Автокликер активирован! +1 мон/сек");
                 } else showToast("Нужно 1000 монет");
             });
@@ -428,7 +420,6 @@
                         currentUser.coins-=card.price;
                         currentUser.cardsOwned.push(card.id);
                         syncUI();
-                        updateLeaderboard();
                         showToast(`🎉 Карта ${card.name}`);
                     } else showToast("Монет не хватает");
                 });
@@ -445,13 +436,12 @@
             btn.innerHTML = "🐹";
             btn.addEventListener("click", (e) => {
                 if(!gameActive) {
-                    showToast("❌ Нажми «ИГРАТЬ (30 сек)», чтобы начать тапать!");
+                    showToast("❌ Нажми «ИГРАТЬ (30 сек)»!");
                     return;
                 }
-                if(!currentUser){ showToast("Войдите в аккаунт!"); return; }
+                if(!currentUser){ showToast("Войдите!"); return; }
                 currentUser.coins += clickPower;
                 syncUI();
-                updateLeaderboard();
                 btn.style.transform = "scale(0.95)";
                 setTimeout(()=> btn.style.transform = "", 100);
             });
@@ -461,7 +451,7 @@
 
     function startGame30sec(){
         if(!currentUser){ showToast("Нужен аккаунт!"); return; }
-        if(gameActive) { showToast("Игра уже активна! Тапай давай"); return; }
+        if(gameActive) { showToast("Игра уже активна!"); return; }
         gameActive = true;
         let clicks = 0;
         let timeLeft = 30;
@@ -477,7 +467,6 @@
                 let reward = clicks * 5;
                 currentUser.coins += reward;
                 syncUI();
-                updateLeaderboard();
                 statusDiv.innerHTML = `✅ +${reward} монет (тапов ${clicks})`;
                 showToast(`Заработано ${reward} монет!`);
             }
@@ -504,57 +493,21 @@
         if(!currentUser) return "🔒 Войдите";
         if(currentUser.coins<bet) return "❌ Не хватает";
         let win = Math.random()<0.5;
-        if(win){ currentUser.coins+=bet; syncUI(); updateLeaderboard(); return `🪙 ОРЁЛ! +${bet}`; }
-        else{ currentUser.coins-=bet; syncUI(); updateLeaderboard(); return `🪙 РЕШКА! -${bet}`; }
+        if(win){ currentUser.coins+=bet; syncUI(); return `🪙 ОРЁЛ! +${bet}`; }
+        else{ currentUser.coins-=bet; syncUI(); return `🪙 РЕШКА! -${bet}`; }
     }
     function casinoDice(bet){
         if(!currentUser) return "🔒 Войдите";
         if(currentUser.coins<bet) return "❌ Не хватает";
         let d = Math.floor(Math.random()*6)+1;
-        if(d>=4){ let win=bet*2; currentUser.coins+=win; syncUI(); updateLeaderboard(); return `🎲 ${d}! ВЫИГРЫШ x2 +${win}`; }
-        else{ currentUser.coins-=bet; syncUI(); updateLeaderboard(); return `🎲 ${d} Проигрыш -${bet}`; }
-    }
-
-    function updateLeaderboard(){
-        let users = [];
-        for(let i=0; i<localStorage.length; i++){
-            let key = localStorage.key(i);
-            if(key && key.startsWith("user_")){
-                try{
-                    let data = JSON.parse(localStorage.getItem(key));
-                    if(data && data.username && typeof data.coins === "number"){
-                        users.push({ name: data.username, coins: data.coins });
-                    }
-                } catch(e){}
-            }
-        }
-        users.sort((a,b)=>b.coins - a.coins);
-        let top10 = users.slice(0,10);
-        let tbody = document.getElementById("leaderboardBody");
-        let table = document.getElementById("leaderboardTable");
-        let containerDiv = document.getElementById("leaderboardContainer");
-        if(top10.length === 0){
-            table.style.display = "none";
-            containerDiv.style.display = "block";
-            containerDiv.innerHTML = "💰 Нет игроков, зарегистрируйся!";
-            return;
-        }
-        table.style.display = "table";
-        containerDiv.style.display = "none";
-        tbody.innerHTML = "";
-        top10.forEach((u, idx)=>{
-            let row = tbody.insertRow();
-            row.insertCell(0).innerText = idx+1;
-            row.insertCell(1).innerText = u.name;
-            row.insertCell(2).innerText = Math.floor(u.coins);
-        });
+        if(d>=4){ let win=bet*2; currentUser.coins+=win; syncUI(); return `🎲 ${d}! ВЫИГРЫШ x2 +${win}`; }
+        else{ currentUser.coins-=bet; syncUI(); return `🎲 ${d} Проигрыш -${bet}`; }
     }
 
     function showToast(msg){
         let t = document.createElement("div"); t.innerText=msg; t.style.position="fixed"; t.style.bottom="20px"; t.style.left="20px"; t.style.background="#000000cc"; t.style.color="#2eff9e"; t.style.padding="8px 16px"; t.style.borderRadius="40px"; t.style.zIndex="9999"; document.body.appendChild(t); setTimeout(()=>t.remove(),1800);
     }
 
-    // Админка без пароля
     document.getElementById("adminToggleBtn").addEventListener("click",()=>{
         document.getElementById("adminPanel").classList.toggle("hidden");
     });
@@ -567,7 +520,6 @@
             target.coins += val;
             localStorage.setItem(`user_${name}`, JSON.stringify(target));
             if(currentUser && currentUser.username===name){ currentUser.coins = target.coins; syncUI(); }
-            updateLeaderboard();
             showToast(`✅ ${name} +${val} монет`);
         } else showToast("Пользователь не найден");
     });
@@ -584,7 +536,7 @@
         } else showToast("Нет юзера");
     });
     document.getElementById("adminResetGameBtn").addEventListener("click",()=>{
-        if(confirm("Сбросить всех пользователей?")){ localStorage.clear(); currentUser=null; syncUI(); updateLeaderboard(); showToast("Сброшено"); location.reload(); }
+        if(confirm("Сбросить всех пользователей?")){ localStorage.clear(); currentUser=null; syncUI(); showToast("Сброшено"); location.reload(); }
     });
 
     document.getElementById("loginBtn").onclick = ()=>{ let n = prompt("Логин:"); if(n && loginUser(n)) showToast(`Привет, ${n}`); else showToast("Нет такого"); };
@@ -595,7 +547,6 @@
 
     initClicker();
     syncUI();
-    updateLeaderboard();
 </script>
 </body>
 </html>
