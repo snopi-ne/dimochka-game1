@@ -3,25 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>NFTDimochka | Игра с тапами по кнопке</title>
+    <title>NFTDimochka | Хомяки 3x3 + Лидеры</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
         body {
             min-height: 100vh;
             background: radial-gradient(ellipse at center, #0a0f1a 0%, #03060c 100%);
-            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             color: #fff;
             padding: 18px;
             position: relative;
             overflow-x: hidden;
         }
-
         body::before {
             content: '';
             position: fixed;
@@ -37,23 +30,20 @@
             pointer-events: none;
             z-index: 0;
         }
-
         @keyframes starsShift {
             0% { transform: translate(0, 0) rotate(0deg); }
             100% { transform: translate(-80px, -60px) rotate(2deg); }
         }
-
         .ambient {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 50% 30%, rgba(0, 255, 100, 0.08), transparent 70%);
+            background: radial-gradient(circle at 50% 30%, rgba(0, 230, 120, 0.08), transparent 70%);
             pointer-events: none;
             z-index: 0;
         }
-
         .app-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -63,7 +53,6 @@
             flex-direction: column;
             gap: 24px;
         }
-
         .top-bar {
             display: flex;
             flex-wrap: wrap;
@@ -74,9 +63,7 @@
             border-radius: 60px;
             padding: 10px 28px;
             border: 1px solid #2eff9e;
-            box-shadow: 0 0 12px #2eff9e66;
         }
-
         .logo h1 {
             font-size: 1.6rem;
             background: linear-gradient(135deg, #FFD966, #FFA500);
@@ -84,14 +71,12 @@
             background-clip: text;
             color: transparent;
         }
-
         .green-title {
             font-size: 1.3rem;
             font-weight: bold;
             color: #2eff9e;
             text-shadow: 0 0 6px #00ffaa;
         }
-
         .coin-panel {
             display: flex;
             align-items: center;
@@ -101,19 +86,8 @@
             border-radius: 50px;
             border: 1px solid gold;
         }
-
-        .coin-amount {
-            font-size: 28px;
-            font-weight: 800;
-            color: gold;
-        }
-
-        .user-area {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .coin-amount { font-size: 28px; font-weight: 800; color: gold; }
+        .user-area { display: flex; gap: 10px; flex-wrap: wrap; }
         button {
             background: #1f2a3e;
             border: none;
@@ -124,41 +98,34 @@
             cursor: pointer;
             transition: 0.2s;
         }
-
         .btn-gold {
             background: linear-gradient(135deg, #e6b422, #ffcc44);
             color: #1e1a0c;
         }
-
         .grid-2col {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 24px;
         }
-
         .card {
             background: rgba(8, 12, 20, 0.7);
             backdrop-filter: blur(10px);
             border-radius: 38px;
             padding: 20px;
             border: 1px solid rgba(46, 255, 158, 0.5);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
         }
-
         .card h2 {
             font-size: 1.5rem;
             border-left: 5px solid #2eff9e;
             padding-left: 16px;
             margin-bottom: 16px;
         }
-
         .clicker-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin: 20px 0;
         }
-
         .clicker-btn {
             background: #1e2a3a;
             font-size: 64px;
@@ -170,12 +137,10 @@
             box-shadow: 0 8px 0 #0f121c;
             border: 1px solid rgba(255, 215, 0, 0.4);
         }
-
-        .clicker-active:active {
+        .clicker-btn:active {
             transform: translateY(4px);
             box-shadow: 0 4px 0 #0f121c;
         }
-
         .shop-row, .priv-row {
             display: flex;
             justify-content: space-between;
@@ -185,14 +150,12 @@
             border-radius: 60px;
             margin-bottom: 10px;
         }
-
         .casino-area {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
             margin: 15px 0;
         }
-
         .bet-input {
             background: #010101;
             border: 1px solid #2eff9e;
@@ -201,14 +164,12 @@
             border-radius: 40px;
             width: 120px;
         }
-
         .collection {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             margin-top: 12px;
         }
-
         .nft-card {
             background: linear-gradient(145deg, #1f1b1b, #0f0c0a);
             border-radius: 24px;
@@ -218,12 +179,10 @@
             border: 1px solid #ffcd7e;
             cursor: pointer;
         }
-
         .nft-card.owned {
             background: #2a451f;
             border-color: gold;
         }
-
         .leaderboard-table {
             width: 100%;
             border-collapse: collapse;
@@ -234,10 +193,7 @@
             text-align: left;
             border-bottom: 1px solid #2eff9e55;
         }
-        .leaderboard-table th {
-            color: #2eff9e;
-        }
-
+        .leaderboard-table th { color: #2eff9e; }
         .admin-panel {
             background: #0a0c16;
             border-radius: 32px;
@@ -245,18 +201,13 @@
             border: 2px solid crimson;
             margin-top: 10px;
         }
-
-        .admin-panel.hidden {
-            display: none;
-        }
-
+        .admin-panel.hidden { display: none; }
         .flex-row {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             align-items: center;
         }
-
         input, select {
             background: #222;
             border: 1px solid #2eff9e;
@@ -264,7 +215,6 @@
             border-radius: 40px;
             color: white;
         }
-
         .status {
             background: #000000bb;
             border-radius: 30px;
@@ -334,7 +284,7 @@
     </div>
 
     <div id="adminPanel" class="admin-panel hidden">
-        <h3 style="color:red">🔧 АДМИН (пароль: admin123)</h3>
+        <h3 style="color:red">🔧 АДМИН (без пароля)</h3>
         <div class="flex-row">
             <input type="text" id="adminUser" placeholder="username">
             <input type="number" id="adminCoins" placeholder="монеты">
@@ -348,8 +298,8 @@
 
 <script>
     let currentUser = null;
-    let gameActive = false;     // <--- тапать можно только когда gameActive === true
     let clickPower = 1;
+    let gameActive = false;     // тапать можно только когда игра активна
 
     const upgrades = [
         { id: "power1", name: "🐾 Лапа +1", price: 150, effect: (u) => { u.clickBonus = (u.clickBonus||1)+1; return u; } },
@@ -456,6 +406,7 @@
                     currentUser.upgrades.push("auto");
                     currentUser.autoPerSec = (currentUser.autoPerSec||0)+1;
                     syncUI();
+                    updateLeaderboard();
                     showToast("🎫 Автокликер активирован! +1 мон/сек");
                 } else showToast("Нужно 1000 монет");
             });
@@ -477,6 +428,7 @@
                         currentUser.coins-=card.price;
                         currentUser.cardsOwned.push(card.id);
                         syncUI();
+                        updateLeaderboard();
                         showToast(`🎉 Карта ${card.name}`);
                     } else showToast("Монет не хватает");
                 });
@@ -491,10 +443,9 @@
             let btn = document.createElement("div");
             btn.className = "clicker-btn";
             btn.innerHTML = "🐹";
-            // Вся магия здесь: проверяем gameActive
             btn.addEventListener("click", (e) => {
                 if(!gameActive) {
-                    showToast("❌ Сначала нажми «ИГРАТЬ (30 сек)»!");
+                    showToast("❌ Нажми «ИГРАТЬ (30 сек)», чтобы начать тапать!");
                     return;
                 }
                 if(!currentUser){ showToast("Войдите в аккаунт!"); return; }
@@ -527,7 +478,7 @@
                 currentUser.coins += reward;
                 syncUI();
                 updateLeaderboard();
-                statusDiv.innerHTML = `✅ Игра кончилась! +${reward} монет (тапов ${clicks})`;
+                statusDiv.innerHTML = `✅ +${reward} монет (тапов ${clicks})`;
                 showToast(`Заработано ${reward} монет!`);
             }
         }, 1000);
@@ -581,15 +532,15 @@
         let top10 = users.slice(0,10);
         let tbody = document.getElementById("leaderboardBody");
         let table = document.getElementById("leaderboardTable");
-        let container = document.getElementById("leaderboardContainer");
+        let containerDiv = document.getElementById("leaderboardContainer");
         if(top10.length === 0){
             table.style.display = "none";
-            container.style.display = "block";
-            container.innerHTML = "💰 Нет игроков, зарегистрируйся!";
+            containerDiv.style.display = "block";
+            containerDiv.innerHTML = "💰 Нет игроков, зарегистрируйся!";
             return;
         }
         table.style.display = "table";
-        container.style.display = "none";
+        containerDiv.style.display = "none";
         tbody.innerHTML = "";
         top10.forEach((u, idx)=>{
             let row = tbody.insertRow();
@@ -603,22 +554,11 @@
         let t = document.createElement("div"); t.innerText=msg; t.style.position="fixed"; t.style.bottom="20px"; t.style.left="20px"; t.style.background="#000000cc"; t.style.color="#2eff9e"; t.style.padding="8px 16px"; t.style.borderRadius="40px"; t.style.zIndex="9999"; document.body.appendChild(t); setTimeout(()=>t.remove(),1800);
     }
 
-    // АДМИНКА С ПАРОЛЕМ
-    let adminAuthorized = false;
+    // Админка без пароля
     document.getElementById("adminToggleBtn").addEventListener("click",()=>{
-        if(!adminAuthorized){
-            let pwd = prompt("Введите пароль админа:");
-            if(pwd === "admin123"){
-                adminAuthorized = true;
-                document.getElementById("adminPanel").classList.remove("hidden");
-                showToast("Админ-режим активирован");
-            } else { showToast("Неверный пароль!"); }
-        } else {
-            document.getElementById("adminPanel").classList.toggle("hidden");
-        }
+        document.getElementById("adminPanel").classList.toggle("hidden");
     });
     document.getElementById("adminSetCoinsBtn").addEventListener("click",()=>{
-        if(!adminAuthorized){ showToast("Нет прав"); return; }
         let name = document.getElementById("adminUser").value.trim();
         let val = parseInt(document.getElementById("adminCoins").value);
         if(!name||isNaN(val)){ showToast("Введите имя и сумму"); return; }
@@ -632,7 +572,6 @@
         } else showToast("Пользователь не найден");
     });
     document.getElementById("adminGiveCardBtn").addEventListener("click",()=>{
-        if(!adminAuthorized){ showToast("Нет прав"); return; }
         let name = document.getElementById("adminUser").value.trim();
         if(!name){ showToast("Введите имя"); return; }
         let target = loadUser(name);
@@ -645,7 +584,6 @@
         } else showToast("Нет юзера");
     });
     document.getElementById("adminResetGameBtn").addEventListener("click",()=>{
-        if(!adminAuthorized){ showToast("Нет прав"); return; }
         if(confirm("Сбросить всех пользователей?")){ localStorage.clear(); currentUser=null; syncUI(); updateLeaderboard(); showToast("Сброшено"); location.reload(); }
     });
 
